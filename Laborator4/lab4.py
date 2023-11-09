@@ -8,6 +8,7 @@ import time
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import scipy
 
 def main1():
     samples = np.linspace(-1, 1, 10000)
@@ -118,10 +119,44 @@ def ex4():
     pass
 
 def main5():
+    # https://imgur.com/a/IqTcsTt
     pass
 
 def main6():
-    pass
+    # Citire semnal
+    rate, x = scipy.io.wavfile.read('voc.wav')
+    
+    # Impartire in grupuri [(i+1) * hgs, (i+3) * hgs ]
+    groups = []
+    group_size = len(x) / 100
+    
+    for i in range(99):
+        groups.append(np.array([x[j] for j in range((int)(group_size/2*(2*i+1)), (int)(group_size/2*(2*i+3)))]))
+    
+    hgs = (int)(group_size/2)
+    groups.append(np.concatenate((x[hgs:], x[:hgs])))
+    
+    # FFT
+    ffts = []
+    for g in groups:
+        ffts.append(np.fft.fft(g))
+        
+    #print(ffts)
+    
+    #for f in ffts:
+     #   f = f.reshape(, -1)
+    
+    #print(ffts[0].shape)
+    M = np.array(np.asmatrix(ffts[0]))
+    for i in range(1, len(ffts)):
+        M = np.append(M, np.asmatrix(ffts[i]), 1)
+        
+    #M.reshape(-1, 3840)
+    print(M.shape)
+    print(M)
+    
+    #M = np.transpose(M)
+    #print(M.shape)
 
 def ex7():
     # Puterea zgomotului = Psemnal / SNR
@@ -129,6 +164,6 @@ def ex7():
     # deci Pzgomot = 90/10**8 = 9/10**7 db
     pass
 
-def 
+
 if __name__ == '__main__':
-    main3()
+    main6()
