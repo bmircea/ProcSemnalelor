@@ -128,7 +128,7 @@ def main6():
     
     # Impartire in grupuri [(i+1) * hgs, (i+3) * hgs ]
     groups = []
-    group_size = len(x) / 100
+    group_size = int(len(x) / 100)
     
     for i in range(99):
         groups.append(np.array([x[j] for j in range((int)(group_size/2*(2*i+1)), (int)(group_size/2*(2*i+3)))]))
@@ -152,11 +152,17 @@ def main6():
         M = np.append(M, np.asmatrix(ffts[i]), 1)
         
     #M.reshape(-1, 3840)
-    print(M.shape)
-    print(M)
+    #print(M.shape)
+    #print(M)
     
     #M = np.transpose(M)
     #print(M.shape)
+    
+    print(group_size)
+    plt.figure(figsize=(12, 8))
+    plt.specgram(x, group_size, noverlap=int(group_size/2))
+    
+    plt.show()
 
 def ex7():
     # Puterea zgomotului = Psemnal / SNR
