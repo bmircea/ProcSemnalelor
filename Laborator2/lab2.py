@@ -44,35 +44,35 @@ def cosinewave(n):
 
 def main2():
     plt.figure(figsize=(24, 16))
-    samples = np.linspace(-1, 1, 30000)    
-    wave = lambda t, phase: np.cos(2 * np.pi * 800 * t + phase)
+    samples = np.linspace(-1, 1, 150)    
+    wave = lambda t, phase: np.cos(2 * np.pi * 5 * t + phase)
     
-    n = np.random.normal(0, 1, 30000)
-    i = 1;
+    n = np.random.normal(0, 1, 150)
     
+    plt.subplot(2, 1, 1)
     for p in (0, np.pi/2, 3*np.pi/2, np.pi):
-        plt.subplot(2, 2, i)
-        i+=1
         
         sinewave = np.array([wave(x, p) for x in samples])
-        plt.plot(samples[:50], sinewave[:50])
+        plt.plot(samples, sinewave)
         
-        for snr in (0.1, 1., 10., 100.):
-            # compute gamma
-            gamma = np.sqrt(norm2(samples) / snr / norm2(n))
-            print(gamma)
+        
+    sinewave = np.array([wave(x, np.pi/2) for x in samples])    
+    plt.subplot(2, 1, 2)
+    plt.plot(samples, sinewave)
+    for snr in (0.1, 1., 10., 100.):
+        # compute gamma
+        gamma = np.sqrt((norm2(samples))**2 / snr / (norm2(n))**2)
+        print(gamma)
             
-            
-            
-            sine_with_noise = sinewave + gamma * n
-            plt.plot(samples[:50], sine_with_noise[:50])
+        sine_with_noise = sinewave + gamma * n
+        plt.plot(samples, sine_with_noise, label='SNR ' + str(snr))
+        plt.legend()
             
     
     plt.show()
     
 def norm2(x):
-    s = np.sum([x1*x1 for x1 in x])
-    return np.sqrt(s)
+    return np.linalg.norm(x, ord=2)
 
 def main3():
     rate, x = scipy.io.wavfile.read('sine.wav')
@@ -174,4 +174,4 @@ def main8():
     plt.show()
 
 if __name__ == "__main__":
-    main8()
+    main2()

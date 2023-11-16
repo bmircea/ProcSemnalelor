@@ -10,37 +10,45 @@ import math
 import matplotlib.pyplot as plt
 
 def main1():
-    F = [[1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j, 1+0j]]
-    N = 8
-    
-    for i in range(1, N):
-        f = [1 + 0j]
-        for j in range(1, N):
-            f.append(math.e ** (-2 * np.pi * 1j * i * j / N))
-        F.append(f)
+    N = 4
+    F = fourier_m(N)
         
     real = lambda i, V : [f.real for f in V[i]]
     imag = lambda i, V : [f.imag for f in V[i]]
         
     plt.figure(figsize=(12, 8))
    
-    for i in range(8):
-        plt.subplot(8, 1, i+1)
+    for i in range(len(F)):
+        plt.subplot(len(F), 1, i+1)
         plt.stem(real(i, F), imag(i, F))
     
     plt.show()
     
     # matricea este unitara <=> complexa si ortogonala
     
-    # ortogonala <=> transpusa = inversa
-    
+    # ortogonala <=> transpusa (dot) inversa = Identitatea
+    print(F)
     
     A = np.matrix(F)
-    print(np.linalg.inv(A))
+    print(A)
+    AH = A.getH() # transpusa
+    print(AH)
     print('--')
-    print(A.transpose())
-    if (np.array_equal(np.linalg.inv(A), A.transpose())):
+    print(np.identity(N))
+    print(np.dot(AH, A))
+    if (np.allclose(np.dot(AH, A), np.identity(N))):
         print('Matricea Fourier este unitara')
+
+def fourier_m(N):
+    F = []
+    for i in range(N):
+        f = []
+        for j in range(N):
+            f.append(math.e ** (-2* np.pi * 1j * i * j / N))
+        F.append(f)
+        
+    return F
+    
 
 def main2():
     samples = np.linspace(-1, 1, 1000)
@@ -105,4 +113,4 @@ def main3():
     print([abs(xx) for xx in X])
     
 if __name__ == "__main__":
-    main3()
+    main1()
