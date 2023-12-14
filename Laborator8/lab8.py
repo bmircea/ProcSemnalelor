@@ -79,7 +79,7 @@ def main3(timeseries):
     train_data = timeseries[:len(timeseries)-100]
     test_data = timeseries[len(timeseries)-100:]
     
-    ar_model = AutoReg(train_data, lags=3).fit()
+    ar_model = AutoReg(train_data, lags=50).fit()
     
     print(ar_model.summary())
     
